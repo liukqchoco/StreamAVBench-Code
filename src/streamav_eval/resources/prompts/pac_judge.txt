@@ -1,0 +1,50 @@
+# Task
+
+Evaluate the audio transition stability of the provided 4-second audio clip,
+covering 2 seconds before and 2 seconds after a runtime-update boundary.
+
+Current runtime update:
+{current_update}
+
+Judge whether the audio remains continuous and technically stable across the
+boundary. First identify the audio changes allowed by the update, then penalize
+only unintended defects that are separable from those changes.
+
+Inspect for:
+- unintended audio dropouts or abrupt silence;
+- unintended hard cuts or broken ongoing sound;
+- unintended repetition, looping, or stutter;
+- spurious clicks, pops, buzzing, or clipping;
+- unintended sudden volume jumps or other obvious boundary artifacts.
+
+# Stability Scale
+
+1 = No Stability: A severe audio break or corruption occurs at the boundary,
+    making the transition unusable.
+2 = Low Stability: Major boundary defects are clearly audible and strongly
+    disrupt continuity.
+3 = Moderate Stability: The transition remains understandable, but noticeable
+    discontinuity, dropout, or artifact is present.
+4 = High Stability: The transition is coherent overall, with only minor
+    boundary artifacts.
+5 = Full Stability: The transition is aurally continuous and stable, with no
+    obvious unintended boundary defect.
+
+# Diagnostic Fields
+
+- audio_break: true only if an unintended dropout, abrupt silence, hard cut,
+  broken ongoing sound, repetition, loop, or stutter occurs at the boundary.
+- audio_artifact: true only if an unintended click, pop, buzz, clipping event,
+  sudden volume jump, or comparable technical artifact occurs at the boundary.
+
+The diagnostic fields support failure analysis and do not replace the score.
+Return strict JSON with no additional text.
+
+# Output Format
+
+{
+  "score": <1 | 2 | 3 | 4 | 5>,
+  "audio_break": <true | false>,
+  "audio_artifact": <true | false>,
+  "reason": "<short reason>"
+}

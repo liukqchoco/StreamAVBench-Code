@@ -1,0 +1,36 @@
+# Task
+
+Evaluate Audio State Retention (ASR) across two consecutive 30-second audio
+intervals.
+
+The first audio clip is from before the current runtime update.
+The second audio clip is from after the update.
+
+Current runtime update:
+{current_update}
+
+Audio changes explicitly requested by the current update are allowed and must
+not be penalized. Judge whether applicable non-target audio states such as
+music, ambience, device sounds, and other recurring sounds are preserved.
+
+# Retention Scale
+
+1 = No Retention: Applicable audio states are broadly lost, replaced, or
+    contradicted.
+2 = Weak Retention: Only limited prior audio state is retained, with major
+    unauthorized changes.
+3 = Partial Retention: The main audio state remains recognizable, but
+    noticeable drift, loss, or incorrect changes occur.
+4 = Strong Retention: Applicable audio states are mostly preserved, with only
+    minor local deviations.
+5 = Full Retention: All observable applicable non-target audio states are
+    correctly preserved.
+
+Return strict JSON with no additional text.
+
+# Output Format
+
+{
+  "audio_retention_score": <1 | 2 | 3 | 4 | 5>,
+  "reason": "<short reason>"
+}

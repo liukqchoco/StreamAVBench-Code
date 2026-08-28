@@ -1,0 +1,28 @@
+Evaluate audio instruction alignment for this synchronized audio-video clip.
+
+Judge how well the audible semantic content requested by each criterion aligns
+with the content of the clip. Base each score on audible evidence. Use visual
+content only when necessary to identify an explicitly requested sound source,
+event condition, or temporal/causal relation. Do not include visual alignment
+or general audio-video synchronization in the score.
+
+Criteria:
+{criteria}
+
+Please rate the alignment of each criterion on a 5-point Likert scale:
+- 1: No Alignment (The requested content is absent or clearly incorrect).
+- 2: Weak Alignment (Only limited matching evidence is present, with major omissions or deviations).
+- 3: Partial Alignment (The criterion is recognizable but only partly matched).
+- 4: Strong Alignment (The criterion is mostly matched, with only minor discrepancies).
+- 5: Full Alignment (The criterion is clearly and completely matched).
+
+You must respond ONLY with a valid JSON object using the following structure:
+{
+  "answers": [
+    {
+      "id": "<criterion_id>",
+      "reason": "A short explanation for your rating.",
+      "score": <an integer between 1 and 5>
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+# Task
+
+Evaluate Visual State Retention (VSR) across two consecutive 30-second video
+intervals.
+
+The first video is from before the current runtime update.
+The second video is from after the update.
+
+Current runtime update:
+{current_update}
+
+Changes explicitly requested by the current update are allowed and must not
+be penalized. Judge only visual states that should remain unchanged.
+
+Score these fields independently:
+
+- subject_retention: identity, appearance, and unmodified subject states or
+  ongoing activities.
+- environment_retention: scene, background, and their unmodified visual
+  appearance.
+
+# Retention Scale
+
+1 = No Retention: Applicable states are broadly lost, replaced, or contradicted.
+2 = Weak Retention: Only limited prior state is retained, with major
+    unauthorized changes.
+3 = Partial Retention: The main state remains recognizable, but noticeable
+    drift, loss, or incorrect changes occur.
+4 = Strong Retention: Applicable states are mostly preserved, with only minor
+    local deviations.
+5 = Full Retention: All observable applicable non-target states are correctly
+    preserved.
+
+Return strict JSON with no additional text.
+
+# Output Format
+
+{
+  "subject_retention": {
+    "score": <1 | 2 | 3 | 4 | 5>,
+    "reason": "<short reason>"
+  },
+  "environment_retention": {
+    "score": <1 | 2 | 3 | 4 | 5>,
+    "reason": "<short reason>"
+  }
+}

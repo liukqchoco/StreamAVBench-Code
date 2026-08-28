@@ -1,0 +1,308 @@
+{
+  "workers": {
+    "AVAlign": {
+      "batch_size": 8,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.objective.av_alignment",
+        "--source-dir",
+        "${STREAMAV_ROOT}/third_party/imagebind",
+        "--checkpoint",
+        "${STREAMAV_ASSETS_ROOT}/av_alignment/model.pth",
+        "--device",
+        "cuda"
+      ],
+      "cuda_devices": "${STREAMAV_CUDA_DEVICES}",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "${STREAMAV_CUDA_DEVICE}",
+        "PYTHONPATH": "${STREAMAV_ROOT}/src"
+      },
+      "max_parallel": "${STREAMAV_GPU_PARALLELISM}",
+      "max_retries": 1,
+      "mode": "jsonl",
+      "network": false,
+      "timeout_seconds": 3600
+    },
+    "AVSync": {
+      "batch_size": 8,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav-sync/bin/python",
+        "-m",
+        "streamav_eval.workers.objective.av_synchronization",
+        "--source-dir",
+        "${STREAMAV_ROOT}/third_party/synchformer",
+        "--config",
+        "${STREAMAV_ASSETS_ROOT}/av_synchronization/config.yaml",
+        "--checkpoint",
+        "${STREAMAV_ASSETS_ROOT}/av_synchronization/model.pt",
+        "--device",
+        "cuda"
+      ],
+      "cuda_devices": "${STREAMAV_CUDA_DEVICES}",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "${STREAMAV_CUDA_DEVICE}",
+        "PYTHONPATH": "${STREAMAV_ROOT}/src"
+      },
+      "max_parallel": "${STREAMAV_GPU_PARALLELISM}",
+      "max_retries": 1,
+      "mode": "jsonl",
+      "network": false,
+      "timeout_seconds": 3600
+    },
+    "VA": {
+      "batch_size": 16,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.objective.visual_quality",
+        "--checkpoint",
+        "${STREAMAV_ASSETS_ROOT}/visual_quality/head.pth",
+        "--encoder-cache-root",
+        "${STREAMAV_ASSETS_ROOT}/visual_quality",
+        "--device",
+        "cuda"
+      ],
+      "cuda_devices": "${STREAMAV_CUDA_DEVICES}",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "${STREAMAV_CUDA_DEVICE}",
+        "PYTHONPATH": "${STREAMAV_ROOT}/src"
+      },
+      "max_parallel": "${STREAMAV_GPU_PARALLELISM}",
+      "max_retries": 1,
+      "mode": "jsonl",
+      "network": false,
+      "timeout_seconds": 1800
+    },
+    "BC": {
+      "batch_size": 64,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.objective.long_consistency",
+        "--metric",
+        "BC",
+        "--source-dir",
+        "${STREAMAV_ROOT}/third_party/vbench_long",
+        "--entrypoint",
+        "${STREAMAV_ROOT}/third_party/vbench_long/vbench2_beta_long/eval_long.py",
+        "--python",
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "--full-json-path",
+        "${STREAMAV_ROOT}/third_party/vbench_long/vbench2_beta_long/VBench_full_info.json",
+        "--asset-root",
+        "${STREAMAV_ASSETS_ROOT}",
+        "--timeout-seconds",
+        "7200",
+        "--evaluation-fps",
+        "2"
+      ],
+      "cuda_devices": "${STREAMAV_CUDA_DEVICES}",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "${STREAMAV_CUDA_DEVICE}",
+        "PYTHONPATH": "${STREAMAV_ROOT}/src"
+      },
+      "max_parallel": "${STREAMAV_GPU_PARALLELISM}",
+      "max_retries": 1,
+      "mode": "jsonl",
+      "network": false,
+      "timeout_seconds": 7500
+    },
+    "AQ": {
+      "batch_size": 1,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.mllm.worker"
+      ],
+      "concurrency_group": "gemini",
+      "concurrency_limit": "${STREAMAV_MLLM_PARALLELISM}",
+      "env": {
+        "PYTHONPATH": "${STREAMAV_ROOT}/src",
+        "STREAMAV_ALLOW_GEMINI": "1",
+        "STREAMAV_GEMINI_MODEL": "gemini-3.1-pro-preview",
+        "STREAMAV_GEMINI_KEYS_PATH": "${STREAMAV_GEMINI_KEYS_PATH}"
+      },
+      "max_parallel": "${STREAMAV_MLLM_PARALLELISM}",
+      "max_retries": 2,
+      "mode": "jsonl",
+      "network": true,
+      "network_guard": "gemini",
+      "timeout_seconds": 3600
+    },
+    "VQ": {
+      "batch_size": 1,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.mllm.worker"
+      ],
+      "concurrency_group": "gemini",
+      "concurrency_limit": "${STREAMAV_MLLM_PARALLELISM}",
+      "env": {
+        "PYTHONPATH": "${STREAMAV_ROOT}/src",
+        "STREAMAV_ALLOW_GEMINI": "1",
+        "STREAMAV_GEMINI_MODEL": "gemini-3.1-pro-preview",
+        "STREAMAV_GEMINI_KEYS_PATH": "${STREAMAV_GEMINI_KEYS_PATH}"
+      },
+      "max_parallel": "${STREAMAV_MLLM_PARALLELISM}",
+      "max_retries": 2,
+      "mode": "jsonl",
+      "network": true,
+      "network_guard": "gemini",
+      "timeout_seconds": 3600
+    },
+    "P0-AIF": {
+      "batch_size": 1,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.mllm.worker"
+      ],
+      "concurrency_group": "gemini",
+      "concurrency_limit": "${STREAMAV_MLLM_PARALLELISM}",
+      "env": {
+        "PYTHONPATH": "${STREAMAV_ROOT}/src",
+        "STREAMAV_ALLOW_GEMINI": "1",
+        "STREAMAV_GEMINI_MODEL": "gemini-3.1-pro-preview",
+        "STREAMAV_GEMINI_KEYS_PATH": "${STREAMAV_GEMINI_KEYS_PATH}"
+      },
+      "max_parallel": "${STREAMAV_MLLM_PARALLELISM}",
+      "max_retries": 2,
+      "mode": "jsonl",
+      "network": true,
+      "network_guard": "gemini",
+      "timeout_seconds": 3600
+    },
+    "P0-VIF": {
+      "batch_size": 1,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.mllm.worker"
+      ],
+      "concurrency_group": "gemini",
+      "concurrency_limit": "${STREAMAV_MLLM_PARALLELISM}",
+      "env": {
+        "PYTHONPATH": "${STREAMAV_ROOT}/src",
+        "STREAMAV_ALLOW_GEMINI": "1",
+        "STREAMAV_GEMINI_MODEL": "gemini-3.1-pro-preview",
+        "STREAMAV_GEMINI_KEYS_PATH": "${STREAMAV_GEMINI_KEYS_PATH}"
+      },
+      "max_parallel": "${STREAMAV_MLLM_PARALLELISM}",
+      "max_retries": 2,
+      "mode": "jsonl",
+      "network": true,
+      "network_guard": "gemini",
+      "timeout_seconds": 3600
+    },
+    "PQ": {
+      "batch_size": 16,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.objective.audio_quality",
+        "--checkpoint",
+        "${STREAMAV_ASSETS_ROOT}/audio_quality/model.pt"
+      ],
+      "cuda_devices": "${STREAMAV_CUDA_DEVICES}",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "${STREAMAV_CUDA_DEVICE}",
+        "PYTHONPATH": "${STREAMAV_ROOT}/src"
+      },
+      "max_parallel": "${STREAMAV_GPU_PARALLELISM}",
+      "max_retries": 1,
+      "mode": "jsonl",
+      "network": false,
+      "timeout_seconds": 1800
+    },
+    "SC": {
+      "batch_size": 64,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.objective.long_consistency",
+        "--metric",
+        "SC",
+        "--source-dir",
+        "${STREAMAV_ROOT}/third_party/vbench_long",
+        "--entrypoint",
+        "${STREAMAV_ROOT}/third_party/vbench_long/vbench2_beta_long/eval_long.py",
+        "--python",
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "--full-json-path",
+        "${STREAMAV_ROOT}/third_party/vbench_long/vbench2_beta_long/VBench_full_info.json",
+        "--asset-root",
+        "${STREAMAV_ASSETS_ROOT}",
+        "--timeout-seconds",
+        "7200",
+        "--evaluation-fps",
+        "2"
+      ],
+      "cuda_devices": "${STREAMAV_CUDA_DEVICES}",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "${STREAMAV_CUDA_DEVICE}",
+        "PYTHONPATH": "${STREAMAV_ROOT}/src"
+      },
+      "max_parallel": "${STREAMAV_GPU_PARALLELISM}",
+      "max_retries": 1,
+      "mode": "jsonl",
+      "network": false,
+      "timeout_seconds": 7500
+    },
+    "PVC-Algorithm": {
+      "batch_size": 1,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.objective.pvc_algorithm"
+      ],
+      "env": {
+        "PYTHONPATH": "${STREAMAV_ROOT}/src"
+      },
+      "max_parallel": 8,
+      "max_retries": 1,
+      "mode": "jsonl",
+      "network": false,
+      "timeout_seconds": 600
+    },
+    "VIF-AIF": {
+      "aliases": [
+        "VIF",
+        "AIF",
+        "VID-Early",
+        "VID-Late",
+        "AID-Early",
+        "AID-Late",
+        "VUF",
+        "AUF",
+        "VSR",
+        "ASR",
+        "HDF-Adjacent",
+        "HDF-Long-Range",
+        "PVC",
+        "PAC"
+      ],
+      "batch_size": 1,
+      "command": [
+        "${STREAMAV_CONDA_ENVS_ROOT}/streamav/bin/python",
+        "-m",
+        "streamav_eval.workers.mllm.worker"
+      ],
+      "concurrency_group": "gemini",
+      "concurrency_limit": "${STREAMAV_MLLM_PARALLELISM}",
+      "env": {
+        "PYTHONPATH": "${STREAMAV_ROOT}/src",
+        "STREAMAV_ALLOW_GEMINI": "1",
+        "STREAMAV_GEMINI_MODEL": "gemini-3.1-pro-preview",
+        "STREAMAV_GEMINI_KEYS_PATH": "${STREAMAV_GEMINI_KEYS_PATH}"
+      },
+      "max_parallel": "${STREAMAV_MLLM_PARALLELISM}",
+      "max_retries": 2,
+      "mode": "jsonl",
+      "network": true,
+      "network_guard": "gemini",
+      "timeout_seconds": 7200
+    }
+  }
+}

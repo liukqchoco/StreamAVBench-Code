@@ -1,0 +1,26 @@
+Evaluate visual instruction fulfillment for this video clip.
+
+Judge whether the visible semantic content requested by each criterion is
+clearly expressed at any time in the clip. Use only visual evidence. The
+requested content does not need to persist throughout the entire clip.
+
+Criteria:
+{criteria}
+
+Please rate the fulfillment of each criterion on a 5-point Likert scale:
+- 1: No Fulfillment (The requested content is absent or clearly incorrect).
+- 2: Weak Fulfillment (Only limited evidence is present, with major missing or incorrect elements).
+- 3: Partial Fulfillment (The criterion is recognizable but only partly realized, with noticeable deficiencies).
+- 4: Strong Fulfillment (The criterion is mostly realized, with only minor missing or incorrect details).
+- 5: Full Fulfillment (The criterion is clearly and completely realized).
+
+You must respond ONLY with a valid JSON object using the following structure:
+{
+  "answers": [
+    {
+      "id": "<criterion_id>",
+      "reason": "A short explanation for your rating.",
+      "score": <an integer between 1 and 5>
+    }
+  ]
+}

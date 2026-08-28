@@ -4,71 +4,155 @@
 
 ### A Comprehensive Benchmark for Streaming Audio-Video Generation
 
-[Project Page](https://liukqchoco.github.io/StreamAVBench/) ·
-[Leaderboard](https://huggingface.co/spaces/liukqchoco04/StreamAVBench-Leaderboard)
+Kaiqi Liu · Haoxuan Zeng · Jingqi Liu · Jiacong Fang · Ziqi Cai ·
+Yunyao Mao · Henglin Liu · Yu Sheng · Shuchen Weng · Boxin Shi
+
+[![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://liukqchoco.github.io/StreamAVBench/)
+[![Paper](https://img.shields.io/badge/Paper-arXiv-b31b1b.svg)](https://arxiv.org/abs/2608.26336)
+[![Leaderboard](https://img.shields.io/badge/Leaderboard-Hugging%20Face-green)](https://huggingface.co/spaces/StreamAVBench/Leaderboard)
+[![Dataset](https://img.shields.io/badge/Dataset-Hugging%20Face-yellow)](https://huggingface.co/datasets/StreamAVBench/StreamAVBench)
+
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Python](https://img.shields.io/badge/Python-%3E%3D3.10-3776AB.svg)
 
 </div>
 
-> **Release status:** This repository is being prepared for the public release
-> of StreamAV-Bench. Evaluation code, benchmark data, and documentation will be
-> added here upon release.
+<p align="center">
+  <img src="https://liukqchoco.github.io/StreamAVBench/assets/teaser.webp"
+       width="96%" alt="StreamAV-Bench benchmark overview">
+</p>
 
 ## Overview
 
-StreamAV-Bench evaluates streaming audio-video generation through two
-complementary tracks:
+StreamAV-Bench evaluates streaming audio-video generation through a
+**Progressive Track** for instruction adherence and long-horizon stability and
+an **Interactive Track** for runtime-update response, state retention, and
+history-dependent reuse. It contains 160 scenarios per track, 800 interactive
+updates, and 32 evaluation dimensions.
 
-- **Progressive Track:** evaluates instruction adherence, quality evolution,
-  and long-horizon consistency during continuous generation from a global
-  prompt.
-- **Interactive Track:** evaluates responses to runtime prompt updates,
-  transition stability, state retention, and dependencies on earlier
-  interactions.
+This repository provides the evaluation code. Benchmark prompts and checklists
+are distributed through the
+[StreamAV-Bench dataset](https://huggingface.co/datasets/StreamAVBench/StreamAVBench).
 
-The benchmark contains:
+## Repository Structure
 
-- **320** expert-verified scenarios;
-- **160** progressive and **160** interactive scenarios;
-- **800** runtime updates;
-- **33** fine-grained metrics organized into six evaluation groups;
-- evaluations of **13** representative streaming audio-video systems.
+```text
+.
+├── configs/                 Worker template and NBC protocol
+├── docs/                    External dependency guide
+├── examples/                Minimal evaluation, run, and report configurations
+├── scripts/                 Checkpoint, configuration, aggregation, and export helpers
+├── src/streamav_eval/       Evaluation package and command-line implementation
+├── third_party/             Minimal evaluator runtime dependencies
+├── evaluate.py              Main evaluation command
+├── run_evaluation.sh        End-to-end evaluation wrapper
+├── setup.sh                 Conda environment setup
+├── requirements.txt         Main evaluator environment
+├── requirements_sync.txt    Synchronization evaluator environment
+├── pyproject.toml           Package metadata and CLI entry point
+├── LICENSE                  StreamAV-Bench MIT License
+└── NOTICE                   External software and model attribution
+```
 
-## Planned Release
+## Quick Start
 
-The public release will include:
+Create the two evaluator environments and download the evaluator checkpoints:
 
-- benchmark scenarios, prompts, and evaluation checklists;
-- the StreamAV-Bench evaluation toolkit;
-- metric configurations and evaluation protocols;
-- scripts for preparing model outputs and running evaluation;
-- result aggregation and leaderboard export utilities;
-- reproducibility documentation and example commands.
+```bash
+bash setup.sh
+conda activate streamav
+export STREAMAV_DATASET_ROOT="/path/to/StreamAVBench-Dataset"
+export STREAMAV_GEMINI_KEYS_PATH="/path/to/api_keys.txt"
+bash scripts/download_assets.sh
+```
 
-## Evaluation Groups
+Put one Gemini API key per line in the key file. See
+[docs/dependencies.md](docs/dependencies.md) for checkpoint sources.
 
-StreamAV-Bench organizes its 33 metrics into:
+## Prepare Model Outputs
 
-1. Quality and Alignment;
-2. Streaming Efficiency;
-3. Instruction Fulfillment and Drift;
-4. Long-Horizon Quality and Consistency;
-5. Interactive Update Response;
-6. State Retention and History Dependency.
+Provide one JSON object per generated scenario:
 
-The leaderboard reports metrics separately rather than introducing an
-unsupported overall score. Metric direction, applicability, and missing-value
-rules follow the official evaluation protocol.
+```json
+{
+  "model_id": "my-model",
+  "case_id": "P-0001",
+  "video_path": "outputs/my-model/P-0001.mp4",
+  "runtime": {
+    "generated_video_frames": 2880,
+    "generation_time_seconds": 240.0,
+    "time_to_first_chunk_seconds": 4.2
+  }
+}
+```
 
-## News
+Paths may be absolute or relative to the manifest. The track and expected
+duration are read from the benchmark dataset. A full submission contains one
+output for every scenario in both tracks.
+Include `runtime` for every case of a model when generation timing can be
+measured; otherwise omit it from every case. For cascaded systems, timing must
+include the full audio-video pipeline.
 
-- **2026-08:** Project page and leaderboard repositories initialized.
-- Evaluation code and benchmark data: **coming soon**.
+## Run Evaluation
+
+Copy the example manifest, replace its media paths with your generated videos,
+and run:
+
+```bash
+bash run_evaluation.sh examples/evaluation.json
+```
+
+Results are written to `artifacts/report/report.json`. The script validates the
+inputs, builds metric jobs, runs evaluators, and aggregates the report.
+
+Native-boundary continuity and efficiency require generation-time metadata and
+are added before public export. The corresponding helpers expose their options
+through:
+
+```bash
+python scripts/aggregate_efficiency.py --help
+python scripts/evaluate_nbc.py --help
+python scripts/aggregate_nbc.py --help
+```
+
+Export the 32 public dimensions to JSON and CSV with:
+
+```bash
+python scripts/export_public_results.py --help
+```
+
+## Metrics
+
+StreamAV-Bench reports 32 dimensions and does not define an overall score:
+
+- **Shared:** VA, VQ, PQ, AQ, AVAlign, AVSync, NBC, FPS, and TTFC.
+- **Progressive instruction following:** VIF, AIF, VID, and AID.
+- **Progressive long-horizon stability:** VA-D, VQ-D, PQ-D, AQ-D, SC, BC,
+  AVAlign-D, and AVSync-D.
+- **Interactive response and state:** VUF, AUF, PVC, PAC, PVUAR, PAUAR, PVRL,
+  PARL, VSR, ASR, and HDF.
+
+SC and BC uniformly sample the full 180-second rollout at 2 FPS before the
+VBench-Long slow-fast evaluation. AVSync averages the absolute offsets from the
+first and last 4.8-second windows of each 30-second interval. Results are first
+aggregated within each case and then averaged uniformly across cases.
+VSR and ASR are evaluated for every runtime update.
 
 ## Citation
 
-Citation information will be added when the paper is publicly released.
+```bibtex
+@article{liu2026streamav,
+  title={StreamAV-Bench: A Comprehensive Benchmark for Streaming Audio-Video Generation},
+  author={Liu, Kaiqi and Zeng, Haoxuan and Liu, Jingqi and Fang, Jiacong and Cai, Ziqi and Mao, Yunyao and Liu, Henglin and Sheng, Yu and Weng, Shuchen and Shi, Boxin},
+  journal={arXiv preprint arXiv:2608.26336},
+  year={2026}
+}
+```
 
 ## License
 
-License information for the code and benchmark data will be announced with the
-public release.
+The StreamAV-Bench code, documentation, and evaluator prompts are released
+under the [MIT License](LICENSE). The
+[benchmark dataset](https://huggingface.co/datasets/StreamAVBench/StreamAVBench)
+is released separately under CC BY-NC 4.0. Third-party packages, models, and
+checkpoints retain their own terms; see [NOTICE](NOTICE).

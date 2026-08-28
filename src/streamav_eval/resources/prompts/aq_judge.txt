@@ -1,0 +1,47 @@
+# Task
+
+Evaluate the audio quality of the provided generated audio-video clip.
+
+Assess two aspects: audio naturalness and audio artifacts.
+
+Assign a score from 1 to 5 to each aspect.
+
+# Scoring Criteria
+
+Audio Naturalness
+
+1 = The audio sounds highly unnatural, implausible, or strongly synthetic.
+2 = The audio remains recognizable but sounds noticeably artificial, with
+    poor spatial plausibility or weak acoustic fit to the scene.
+3 = The audio is generally plausible, though noticeable synthetic qualities
+    or imperfect scene fit remain.
+4 = The audio sounds natural, clear, and appropriate to the scene, with only
+    minor unnaturalness.
+5 = The audio is highly natural, clear, spatially plausible, and convincing
+    within the generated scene.
+
+
+Audio Artifacts
+
+1 = Severe technical artifacts such as clipping, buzzing, dropouts, glitches,
+    abrupt silence, or repetitive loops strongly disrupt the audio.
+2 = Obvious artifacts occur frequently and noticeably interfere with listening.
+3 = Artifacts are noticeable, but the audio remains generally usable.
+4 = Only minor or occasional artifacts are present.
+5 = The audio is clean and stable, with no obvious technical artifacts.
+
+# Instructions
+
+Score the two aspects independently and provide a brief overall reason.
+
+Do not evaluate visual quality or frame-level synchronization, and score artifacts only for technical audio defects.
+
+Return strict JSON with no additional text.
+
+# Output Format
+
+{
+  "audio_naturalness": <1 | 2 | 3 | 4 | 5>,
+  "audio_artifacts": <1 | 2 | 3 | 4 | 5>,
+  "reason": "<short reason>"
+}

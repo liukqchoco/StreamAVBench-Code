@@ -1,0 +1,53 @@
+# Task
+
+Evaluate Audio Update Fulfillment (AUF) for the provided 30-second
+synchronized audio-video interval after a runtime update.
+
+Judge only the audio-applicable change explicitly requested by the current
+update. Use video only when necessary to identify an explicitly requested
+sound source, event condition, or audio consequence. Do not turn general
+audio-video synchronization or visual fulfillment into part of the AUF score.
+
+Modality-specific audio update:
+{audio_update}
+
+# Fulfillment Scale
+
+1 = No Fulfillment: The requested audio change is absent, or the main result
+    clearly contradicts the update.
+2 = Weak Fulfillment: There is an update-related attempt or weak audio
+    response, but the core audio target is not achieved.
+3 = Partial Fulfillment: The core audio interaction is recognizable but
+    incomplete, or important requested details are incorrect.
+4 = Strong Fulfillment: The core audio target is correctly achieved, with
+    only minor missing or incorrect details.
+5 = Full Fulfillment: The core audio target, explicit semantic details, and
+    any applicable requested causal or temporal relation are fully realized.
+
+# Temporal Localization
+
+- The evaluation timeline spans 30.0 seconds. Audio is continuous and
+  synchronized with a visual stream sampled at 2 FPS.
+- Timestamp 0.0 is the start of the post-update interval. Report audio times
+  only on the shared 0.5-second grid: 0.0, 0.5, ..., 29.5 seconds.
+- onset_latency_s is the first time at which a clear, instruction-directed
+  audio change begins.
+- target_achievement_latency_s is the first time at which the core audio
+  target is clearly achieved. It is not the natural ending time of a sound.
+- If no clear onset occurs, set started=false and both latency fields to null.
+- If onset occurs but the core target is never achieved, keep
+  target_achievement_latency_s=null.
+
+Return strict JSON with no additional text.
+
+# Output Format
+
+{
+  "metric": "AUF",
+  "started": <true | false>,
+  "fulfillment_score": <1 | 2 | 3 | 4 | 5>,
+  "onset_latency_s": <number | null>,
+  "target_achievement_latency_s": <number | null>,
+  "evidence": "<short timestamped audio evidence>",
+  "reason": "<short reason>"
+}

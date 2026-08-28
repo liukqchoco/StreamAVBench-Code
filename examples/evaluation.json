@@ -1,0 +1,6 @@
+{
+  "run_id": "streamavbench-example",
+  "manifest_path": "manifest.jsonl",
+  "duration_tolerance_seconds": 0.5,
+  "ffprobe": "ffprobe"
+}

@@ -1,0 +1,47 @@
+# Task
+
+Evaluate History-Dependency Following (HDF) for the current runtime update.
+
+The first audio-video clip is from the annotated source interval.
+The second audio-video clip is from the current interval.
+
+Source prompt:
+{source_prompt}
+
+Current runtime update:
+{current_update}
+
+First determine whether the entity, state, or earlier effect required by the
+current update is visibly or audibly established in the source clip.
+
+- If it is not established, set source_state_established=false and
+  dependency_following_score=null.
+- If it is established, score how correctly the current interaction uses that
+  exact source.
+- Ignore unrelated differences between the two clips.
+
+Judge only the source-specific dependency required by the current update; do
+not score overall cross-clip similarity or unrelated state retention.
+
+# Following Scale
+
+1 = No Following: The specified source is not used, or the current interaction
+    uses the wrong entity, state, or earlier effect.
+2 = Weak Following: Only a weak or highly uncertain source-specific relation is
+    present, with major errors.
+3 = Partial Following: The dependency is recognizable but incomplete, or its
+    key reference contains noticeable errors.
+4 = Strong Following: The specified source is used correctly, with only
+    minor detail errors.
+5 = Full Following: The current interaction is clearly and completely grounded
+    in the specified source.
+
+Return strict JSON with no additional text.
+
+# Output Format
+
+{
+  "source_state_established": <true | false>,
+  "dependency_following_score": <1 | 2 | 3 | 4 | 5 | null>,
+  "reason": "<short reason>"
+}

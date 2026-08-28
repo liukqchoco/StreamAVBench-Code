@@ -1,0 +1,49 @@
+# Credentials and local configuration
+.env
+.env.*
+.secrets/
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+build/
+dist/
+.venv/
+
+# Local maintenance tests
+/tests/
+
+# Local evaluator state
+/.cache/
+/assets/
+/dataset/
+/artifacts/
+/outputs/
+/results/
+/workers.local.json
+*.ckpt
+*.pth
+*.pt
+*.safetensors
+
+# Generated media
+*.aac
+*.m4a
+*.mp4
+*.webm
+*.wav
+*.flac
+*.log
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/

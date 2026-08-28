@@ -1,0 +1,18 @@
+StreamAV-Bench bundles minimal runtime subsets of external evaluator projects
+under third_party/. Model checkpoints are downloaded separately.
+
+- third_party/vbench_long contains VBench / VBench-Long runtime source licensed
+  under Apache-2.0.
+- third_party/synchformer contains Synchformer runtime source licensed under MIT.
+  Its AST and Motionformer-derived files retain their original notices.
+- third_party/imagebind contains ImageBind runtime source under CC BY-NC-SA 4.0.
+- ImageBind checkpoints retain their own CC BY-NC-SA 4.0 terms.
+- OpenAI CLIP is licensed under MIT.
+- Audiobox Aesthetics and the LAION Aesthetic Predictor retain their package,
+  checkpoint, and model terms.
+- NBC/PVC transition diagnostics are independently implemented with attribution
+  to LongAV-Compass; no LongAV-Compass source code is included.
+
+Users must comply with all upstream terms. The StreamAV-Bench MIT License does
+not relicense files under third_party/ or downloaded model assets. Sources and
+checkpoint links are listed in docs/dependencies.md.

@@ -1,0 +1,67 @@
+# Task
+
+Evaluate the visual quality of the provided generated video.
+
+Assess four aspects: visual fidelity, subject integrity, motion naturalness,
+and visual artifacts.
+
+Assign a score from 1 to 5 to each aspect.
+
+# Scoring Criteria
+
+Visual Fidelity
+
+1 = Visual quality is severely degraded by blur, exposure errors,
+    compression, corruption, or other major failures.
+2 = Visual quality is poor, with frequent degradation that noticeably
+    affects viewing.
+3 = Visual quality is acceptable but contains noticeable quality defects.
+4 = Visual quality is good overall, with only minor imperfections.
+5 = Visual content is sharp, clear, properly exposed, and well rendered.
+
+
+Subject Integrity
+
+1 = Main subjects are severely deformed or difficult to recognize.
+2 = Subjects are recognizable but frequently distorted, unstable, or
+    structurally broken.
+3 = Subjects are mostly recognizable, with noticeable but tolerable
+    identity or geometry inconsistencies.
+4 = Subjects remain stable and structurally intact, with only minor defects.
+5 = Subjects are consistently clear, complete, and visually coherent.
+
+
+Motion Naturalness
+
+1 = Motion is severely broken, physically incoherent, or impossible to
+    meaningfully assess.
+2 = Motion is largely stiff, incorrect, or visibly unnatural.
+3 = Motion is understandable but contains noticeable jitter, irregularity,
+    or unnatural dynamics.
+4 = Motion is natural and coherent overall, with only minor local issues.
+5 = Motion is smooth, fluent, and physically plausible.
+
+
+Visual Artifacts
+
+1 = Severe generation artifacts dominate the visual content.
+2 = Obvious artifacts occur frequently and substantially disrupt viewing.
+3 = Artifacts are noticeable but the video remains generally viewable.
+4 = Only minor or occasional artifacts are visible.
+5 = No obvious generation artifacts are observed.
+
+# Instructions
+
+Score the four aspects independently and provide a brief overall reason.
+
+Return strict JSON with no additional text.
+
+# Output Format
+
+{
+  "visual_fidelity": <1 | 2 | 3 | 4 | 5>,
+  "subject_integrity": <1 | 2 | 3 | 4 | 5>,
+  "motion_naturalness": <1 | 2 | 3 | 4 | 5>,
+  "visual_artifacts": <1 | 2 | 3 | 4 | 5>,
+  "reason": "<short reason>"
+}

@@ -1,0 +1,2 @@
+{"model_id":"my-model","case_id":"P-0001","track":"progressive","video_path":"../outputs/my-model/P-0001.mp4","duration_seconds":180,"runtime":{"generated_video_frames":2880,"generation_time_seconds":240.0,"time_to_first_chunk_seconds":4.2}}
+{"model_id":"my-model","case_id":"I-0001","track":"interactive","video_path":"../outputs/my-model/I-0001.mp4","duration_seconds":180,"runtime":{"generated_video_frames":2880,"generation_time_seconds":250.0,"time_to_first_chunk_seconds":4.5}}

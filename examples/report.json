@@ -1,0 +1,13 @@
+{
+  "raw_paths": [
+    "../artifacts/raw.jsonl"
+  ],
+  "expected_cases": {
+    "progressive": 160,
+    "interactive": 160
+  },
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 0,
+  "bootstrap_confidence": 0.95,
+  "output_dir": "../artifacts/report"
+}

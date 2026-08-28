@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "streamav-eval"
+version = "0.1.0"
+description = "Official evaluation toolkit for StreamAV-Bench"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+  {name = "Kaiqi Liu"},
+  {name = "Haoxuan Zeng"},
+  {name = "Jingqi Liu"},
+  {name = "Jiacong Fang"},
+  {name = "Ziqi Cai"},
+  {name = "Yunyao Mao"},
+  {name = "Henglin Liu"},
+  {name = "Yu Sheng"},
+  {name = "Shuchen Weng"},
+  {name = "Boxin Shi"},
+]
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26,<3",
+  "Pillow>=10.4,<13",
+]
+keywords = ["audio-video", "benchmark", "evaluation", "streaming-generation"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.optional-dependencies]
+dev = ["ruff>=0.12"]
+
+[project.urls]
+Homepage = "https://liukqchoco.github.io/StreamAVBench/"
+Paper = "https://arxiv.org/abs/2608.26336"
+Leaderboard = "https://huggingface.co/spaces/StreamAVBench/Leaderboard"
+Dataset = "https://huggingface.co/datasets/StreamAVBench/StreamAVBench"
+Repository = "https://github.com/liukqchoco/StreamAVBench-Code"
+
+[project.scripts]
+streamav-eval = "streamav_eval.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+streamav_eval = [
+  "resources/prompts/*.txt",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B"]

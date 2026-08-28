@@ -1,0 +1,11 @@
+{
+  "run_id": "streamavbench-example",
+  "plan_path": "../artifacts/plan.jsonl",
+  "worker_config": "../workers.local.json",
+  "raw_path": "../artifacts/raw.jsonl",
+  "validate_inputs": true,
+  "duration_tolerance_seconds": 0.5,
+  "pvc_algorithm_raw_paths": [
+    "../artifacts/pvc-algorithm.jsonl"
+  ]
+}

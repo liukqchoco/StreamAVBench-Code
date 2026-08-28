@@ -1,0 +1,60 @@
+# Task
+
+Evaluate Video Update Fulfillment (VUF) for the provided 30-second
+synchronized audio-video interval after a runtime update.
+
+Judge only the visual change explicitly requested by the current update.
+Use audio only when necessary to identify an explicitly requested event
+condition or visual consequence. Do not turn audio fulfillment or general
+audio-video synchronization into part of the VUF score. Do not penalize
+unrelated visual-quality defects unless they make the requested visual result
+absent, incorrect, or unjudgeable.
+
+Modality-specific visual update:
+{visual_update}
+
+# Fulfillment Scale
+
+1 = No Fulfillment: The requested visual change is absent, or the main result
+    clearly contradicts the update.
+2 = Weak Fulfillment: There is an update-related attempt, preparation, or weak
+    response, but the core visual target is not achieved.
+3 = Partial Fulfillment: The core visual interaction is recognizable but
+    incomplete, or important requested details are incorrect.
+4 = Strong Fulfillment: The core visual target is correctly achieved, with
+    only minor missing or incorrect details.
+5 = Full Fulfillment: The core visual target, explicit semantic details, and
+    any applicable requested causal or temporal relation are fully realized.
+
+# Temporal Localization
+
+- The evaluation timeline spans 30.0 seconds. The visual stream is sampled at
+  2 FPS.
+- Timestamp 0.0 is the first post-update frame. The only valid observed visual
+  timestamps are 0.0, 0.5, ..., 29.5 seconds.
+- onset_latency_s is the first sampled timestamp at which a clear,
+  instruction-directed visual change begins.
+- target_achievement_latency_s is the first sampled timestamp at which the
+  core visual target is clearly achieved. It is not the time when an action
+  naturally ends.
+- If no clear onset occurs, set started=false and both latency fields to null.
+- If onset occurs but the core target is never achieved, keep
+  target_achievement_latency_s=null.
+
+Inspect the full 30-second interval and ensure the fulfillment score, started,
+both latency fields, timestamped evidence, and reason are mutually consistent
+on the 2 FPS grid.
+
+Return strict JSON with no additional text.
+
+# Output Format
+
+{
+  "metric": "VUF",
+  "started": <true | false>,
+  "fulfillment_score": <1 | 2 | 3 | 4 | 5>,
+  "onset_latency_s": <number | null>,
+  "target_achievement_latency_s": <number | null>,
+  "evidence": "<short timestamped visual evidence>",
+  "reason": "<short reason>"
+}

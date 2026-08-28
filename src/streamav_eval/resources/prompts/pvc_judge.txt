@@ -1,0 +1,53 @@
+# Task
+
+Evaluate the visual transition stability of the provided 4-second video clip,
+covering 2 seconds before and 2 seconds after a runtime-update boundary.
+
+Current runtime update:
+{current_update}
+
+Judge whether the video remains visually continuous and technically stable
+across the boundary. First identify the visual changes allowed by the update,
+then penalize only unintended defects that are separable from those changes.
+
+Inspect for:
+- black frames, flashes, flickering, freezing, or duplicate-frame stalls;
+- abrupt visual discontinuity or generation break;
+- abnormal subject deformation;
+- broken or discontinuous action;
+- unintended object or subject disappearance.
+
+# Stability Scale
+
+1 = No Stability: A severe generation break or corruption occurs at the
+    boundary, making the transition unusable.
+2 = Low Stability: Major boundary defects are clearly visible and strongly
+    disrupt continuity.
+3 = Moderate Stability: The transition remains understandable, but noticeable
+    discontinuity, deformation, or local instability is present.
+4 = High Stability: The transition is coherent overall, with only minor
+    boundary artifacts.
+5 = Full Stability: The transition is visually continuous and stable, with no
+    obvious unintended boundary defect.
+
+# Diagnostic Fields
+
+- generation_break: true only if an unintended abrupt discontinuity,
+  black/flash/freeze event, or broken action occurs at the boundary.
+- deformation: true only if an unintended structural distortion of a subject
+  or object occurs at the boundary.
+- object_disappear: true only if an unintended subject or object disappearance
+  occurs at the boundary.
+
+The diagnostic fields support failure analysis and do not replace the score.
+Return strict JSON with no additional text.
+
+# Output Format
+
+{
+  "score": <1 | 2 | 3 | 4 | 5>,
+  "generation_break": <true | false>,
+  "deformation": <true | false>,
+  "object_disappear": <true | false>,
+  "reason": "<short reason>"
+}

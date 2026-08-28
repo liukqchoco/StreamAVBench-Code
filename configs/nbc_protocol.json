@@ -1,0 +1,93 @@
+{
+  "schema_version": "streamavbench-nbc-protocol-1.0.0",
+  "metric_id": "NBC",
+  "metric_name": "Native Boundary Continuity",
+  "direction": "higher_is_better",
+  "main_score_scale": [
+    0,
+    100
+  ],
+  "reference": {
+    "formula": "technical transition score",
+    "reuse": "detector thresholds and penalty are reused verbatim",
+    "adaptation": "the detector is applied to every complete model-native progressive-generation boundary window; boundaries are reconstructed from frozen native generation-unit geometry; aggregation is boundary-mean within case then equal-case mean"
+  },
+  "detector": {
+    "evaluator_fps": 8,
+    "width": 160,
+    "window_seconds": 4.0,
+    "sampling": "boundary-aligned native-frame phase, then 8 FPS; every full video is decoded once",
+    "black_threshold": 0.05,
+    "duplicate_threshold": 0.01,
+    "flash_threshold": 0.45,
+    "penalty": "70*black_frame_ratio + 45*duplicate_frame_ratio + 12*freeze_max_sec + 8*flash_count",
+    "score": "clip(100-penalty,0,100)"
+  },
+  "profiles": {
+    "wan_block3_16fps": {
+      "output_fps": 16,
+      "first_chunk_frames": 9,
+      "subsequent_chunk_frames": 12,
+      "geometry": "Wan temporal VAE yields 4*n-3 frames for the first 3-latent block and 4*n frames for later cached blocks"
+    },
+    "helios_chunk33_24fps": {
+      "output_fps": 24,
+      "first_chunk_frames": 33,
+      "subsequent_chunk_frames": 33,
+      "geometry": "Helios emits fixed 33-frame native chunks"
+    },
+    "omniforcing_ltx2_24fps": {
+      "output_fps": 24,
+      "first_chunk_frames": 25,
+      "subsequent_chunk_frames": 24,
+      "geometry": "LTX-2 first block has 4 latent frames and later blocks have 3; the first block decodes to 1+(4-1)*8=25 frames and cached later blocks contribute 24 frames"
+    }
+  },
+  "methods": {
+    "omniforcing": {
+      "display_name": "OmniForcing",
+      "profile": "omniforcing_ltx2_24fps"
+    },
+    "self_forcing_infinity_rope": {
+      "display_name": "Self-Forcing",
+      "profile": "wan_block3_16fps"
+    },
+    "longlive": {
+      "display_name": "LongLive",
+      "profile": "wan_block3_16fps"
+    },
+    "rolling_forcing": {
+      "display_name": "Rolling-Forcing",
+      "profile": "wan_block3_16fps"
+    },
+    "deep_forcing": {
+      "display_name": "Deep Forcing",
+      "profile": "wan_block3_16fps"
+    },
+    "memflow": {
+      "display_name": "MemFlow",
+      "profile": "wan_block3_16fps"
+    },
+    "causal_forcing_infinity_rope": {
+      "display_name": "Causal-Forcing",
+      "profile": "wan_block3_16fps"
+    },
+    "helios": {
+      "display_name": "Helios",
+      "profile": "helios_chunk33_24fps"
+    },
+    "swift": {
+      "display_name": "SWIFT",
+      "profile": "wan_block3_16fps"
+    },
+    "iamflow": {
+      "display_name": "IAMFlow",
+      "profile": "wan_block3_16fps"
+    }
+  },
+  "inapplicable_methods": {
+    "pixverse-r1": "model-native video boundaries are not observable through the commercial interface",
+    "happyoyster": "model-native video boundaries are not observable through the commercial interface",
+    "odyssey": "model-native video boundaries are not observable through the commercial interface"
+  }
+}
